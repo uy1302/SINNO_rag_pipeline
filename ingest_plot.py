@@ -158,7 +158,6 @@ if __name__ == "__main__":
     df = pd.read_csv("viblo_data.csv")
     df = df.drop(columns=['URL','Title'])
 
-
     try:
         # for x in range(2,5):
         #     long_texts = (df['Plot'][x])
@@ -168,13 +167,16 @@ if __name__ == "__main__":
         #         TABLE_NAME, 
         #         VECTOR_DIMENSION
         #     )
-        input_text = input("Enter a text to find similar entries: ")
+        input_text = input("Enter a question: ")
         results = embedder.query_most_similar(input_text, TABLE_NAME, top_k=5)
 
-        for result in results:
-            print(f"Text: {result[0]}\nSimilarity: {result[1]}")
-            print()
-
+        # for result in results:
+        #     print(f"Text: {result[0]}\nSimilarity: {result[1]}")
+        #     print()
+        url = "https://db30-34-82-190-189.ngrok-free.app/predict"
+        payload = {"input_text": "answer the following question" + input_text + "when combine with this information" + results[0][0]}
+        response = requests.post(url, json=payload)
+        print(response.json())
     except Exception as e:
         print(f"An error occurred: {e}")
     finally:
